@@ -1,0 +1,195 @@
+openapi: 3.0.0
+info:
+  description: API specification
+  version: v3
+  title: Microservice
+servers:
+  - url: 'http://localhost:8080/shahid/'
+    description: Local
+paths:
+  /products:
+    get:
+      tags:
+        - Product
+      summary: Get all active products
+      operationId: getAllProducts
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - in: query
+          name: size
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: A list of all active products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductDto'
+        '400':
+          $ref: 'error-response.yaml#/components/schemas/BadRequestError'
+        '500':
+          $ref: 'error-response.yaml#/components/schemas/InternalServerError'
+    post:
+      tags:
+        - Product
+      summary: Create a new product
+      operationId: createProduct
+      requestBody:
+        required: true
+        description: Product to be added
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '201':
+          description: Product successfully created
+        '400':
+          $ref: 'error-response.yaml#/components/schemas/BadRequestError'
+        '500':
+          $ref: 'error-response.yaml#/components/schemas/InternalServerError'
+
+  /products/{id}:
+    get:
+      tags:
+        - Product
+      summary: Get an active product by id
+      operationId: getProductById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: An active product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDto'
+        '404':
+          $ref: 'error-response.yaml#/components/schemas/NotFound'
+        '500':
+          $ref: 'error-response.yaml#/components/schemas/InternalServerError'
+    put:
+      tags:
+        - Product
+      summary: Update a existing product attributes
+      operationId: updateProduct
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Product to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        '200':
+          description: An active product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDto'
+        '400':
+          $ref: 'error-response.yaml#/components/schemas/BadRequestError'
+        '500':
+          $ref: 'error-response.yaml#/components/schemas/InternalServerError'
+    delete:
+      tags:
+        - Product
+      summary: Soft delete an active Product
+      operationId: deleteProduct
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: soft delete a product
+        '404':
+          $ref: 'error-response.yaml#/components/schemas/NotFound'
+        '500':
+          $ref: 'error-response.yaml#/components/schemas/InternalServerError'
+  /products/type:
+    get:
+      tags:
+        - Product
+      summary: Get all active products by type
+      operationId: getProductsByType
+      parameters:
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - in: query
+          name: size
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: A list of all active products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductDto'
+        '400':
+          $ref: 'error-response.yaml#/components/schemas/BadRequestError'
+        '500':
+          $ref: 'error-response.yaml#/components/schemas/InternalServerError'
+
+
+components:
+  schemas:
+    ProductDto:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        type:
+          type: string
+    ProductRequest:
+      type: object
+      properties:
+        titleAr:
+          type: string
+        titleEn:
+          type: string
+        titleFr:
+          type: string
+        type:
+          type: string
+      required:
+        - titleAr
+        - type

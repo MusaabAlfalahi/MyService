@@ -1,0 +1,8 @@
+components:
+  schemas:
+    InternalServerError:
+      description: InternalServerError
+    NotFound:
+      description: BadRequest
+    BadRequestError:
+      description: BadRequest

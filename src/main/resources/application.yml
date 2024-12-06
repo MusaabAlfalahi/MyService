@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: MyService
+  data:
+    mongodb:
+      uri: mongodb+srv://mosaabdulimi:123@cluster0.twacylv.mongodb.net/
+      database: MyService
+      uuid-representation: standard
+    redis:
+      host: redis
+      port: 6379
+  security:
+    user:
+      name: username
+      password: password
+
+logging:
+  level:
+    org.springframework:
+      cache: DEBUG
+      data.redis: DEBUG
+
+redis:
+  keys:
+    default-key: products
+    custom-key: custom
+
+server:
+  servlet:
+    context-path: /shahid
